@@ -1,38 +1,230 @@
 .App {
-  text-align: center;
+  min-height:100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.displayButton{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:4px;
+  border-radius:4px;
+  padding:2px 4px;
+  margin:20px 40px;
+  background-color:white;
+  border:2px solid #f3f4f7;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+.container {
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  width: 24px; 
+  height: 24px; 
+  border-radius: 50%;
+  background-color: #6a7fcb; 
+  color: white; 
+  font-size: 1em; 
+  font-weight: bold; 
+  text-align: center; 
+  margin: 1px; 
+  border: 2px solid #fff; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.dashboard {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color:#f5f5f7;
+  padding:0px 20px;
+  min-height:100vh;
 }
 
-.App-link {
-  color: #61dafb;
+.dashboard-column {
+  width: 300px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+  display:flex;
+  flex-direction:column;
+}
+.dashboard-column h3{
+  top:0px;
 }
 
-@keyframes App-logo-spin {
+.group-header{
+  display:flex;
+   justify-content:space-between;
+   align-items:center;
+   width:100%;
+}
+.group-class{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:10px;
+}
+.number{
+  font-size:12px;
+}
+.add-dot{
+  display:flex;
+  gap:8px;
+  height:20px;
+}
+
+.card {
+  background-color:white;
+  padding:10px;
+  margin:10px 0px;
+  border-radius:10px;
+  width:95%;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display:flex;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.id{
+  color:gray;
+  font-size:11px;
+  margin:0px;
+}
+.title{
+  align-items:start;
+  font-size:13px;
+  display:flex;
+  gap:8px;
+  margin:0px;
+}
+.tag{
+  font-size:10px;
+}
+.tag-img{
+  border:2px solid #f3f4f8;
+  border-radius:4px;
+  height:16px;
+   padding:3px;
+   display:flex;
+   align-items:center;
+   gap:4px;
+}
+.feature{
+  display:flex;
+   gap:8px;
+   align-items:center;
+}
+.feature .img{
+  border:1px solid #f3f4f8;
+  border-radius:4px;
+  height:16px;
+  padding:4px;
+}
+.circle{
+  width:8px;
+  height:8px;
+  border-radius:100%;
+  background-color:grey;
+}
+.center{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:absolute;
+  top:22px;
+  right:2px;
+}
+.profile{
+  position:relative;
+}
+.text-card{
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  gap:4px;
+}
+.profile-card{
+  display:flex;
+  justify-content:end;
+  
+}
+
+.dropdown{
+  position:absolute;
+  background-color:#F3F4F3;
+  padding:10px;
+  width:300px;
+  height:80px;
+  margin-left:40px;
+  margin-top:-10px;
+  border-radius:8px;
+  border:2px solid #f3f4f4;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index:2;
+}
+.dropdown-div{
+display:flex;
+justify-content:space-between;
+gap:20px;
+align-items:center;
+height:30px;
+margin-bottom:10px;
+}
+.dropdown-div select{
+  width:auto;
+  padding:4px;
+  height:24px;
+  border-radius:4px;
+  margin: 10px;
+}
+/* Spinner style */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #000;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+.loading{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+}
+
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Button style */
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button.loading {
+  background-color: #6c757d; /* Grey out the button when loading */
+  cursor: not-allowed;
+}
+
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

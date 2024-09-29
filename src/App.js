@@ -1,8 +1,7 @@
-
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import Display from './assets/icons_FEtask/Display.svg';
-import Down from './assets/icons_FEtask/down.svg'
+import Down from './assets/icons_FEtask/down.svg';
 
 import Dashboard from './Components/Dashboard';
 import Dropdown from './Components/Dropdown';
@@ -13,9 +12,10 @@ function App() {
   const [isOpen, setIsOpen] = useState(false);
   const [tickets, setTickets] = useState([]);
   const [users, setUsers] = useState([]);
-  const [groupBy, setGroupBy] = useState('status'); // Default group by status
-  const [sortBy, setSortBy] = useState('priority'); // Default sort by priority
+  const [groupBy, setGroupBy] = useState('status');
+  const [sortBy, setSortBy] = useState('priority');
   const [loading, setLoading] = useState(true);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     axios.get('https://api.quicksell.co/v1/internal/frontend-assignment')
@@ -35,8 +35,26 @@ function App() {
   }, []);
 
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
 
-  // Helper function to convert priority number to string label
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+  const handleInsideClick = (event) => {
+    event.stopPropagation();
+  };
+
+
   const getPriorityLabel = (priority) => {
     switch (priority) {
       case 4:
@@ -54,17 +72,15 @@ function App() {
     }
   };
 
-  // Sorting function
   const sortTickets = (tickets) => {
     if (sortBy === 'priority') {
-      return tickets.sort((a, b) => b.priority - a.priority); // Descending priority
+      return tickets.sort((a, b) => b.priority - a.priority);
     } else if (sortBy === 'title') {
-      return tickets.sort((a, b) => a.title.localeCompare(b.title)); // Ascending title
+      return tickets.sort((a, b) => a.title.localeCompare(b.title));
     }
     return tickets;
   };
 
-  // Grouping functions
   const groupTickets = (tickets) => {
     switch (groupBy) {
       case 'status':
@@ -79,7 +95,6 @@ function App() {
   };
 
   const groupByStatus = (tickets) => {
-    // Initialize the grouped object with empty arrays for all 5 statuses
     const grouped = {
       'Backlog': [],
       'Todo': [],
@@ -88,7 +103,6 @@ function App() {
       'Cancelled': []
     };
 
-    // Group the tickets by their status
     tickets.forEach((ticket) => {
       const { status } = ticket;
       if (grouped[status]) {
@@ -96,20 +110,17 @@ function App() {
       }
     });
 
-    // Return the grouped object as an array of key-value pairs (status and sorted tickets)
     return Object.entries(grouped).map(([key, tickets]) => ({
       key,
-      tickets: sortTickets(tickets), // Sort tickets if required
+      tickets: sortTickets(tickets),
     }));
   };
 
   const groupByUser = (tickets) => {
     const grouped = tickets.reduce((groups, ticket) => {
       const { userId } = ticket;
-
-      // Find the corresponding user name from the users array based on userId
       const user = users.find((u) => u.id === userId);
-      const userName = user ? user.name : 'Unknown User'; // Use 'Unknown User' if user not found
+      const userName = user ? user.name : 'Unknown User';
 
       if (!groups[userName]) {
         groups[userName] = [];
@@ -119,13 +130,11 @@ function App() {
       return groups;
     }, {});
 
-    // Convert grouped object into an array of key-value pairs with sorted tickets
     return Object.entries(grouped).map(([key, tickets]) => ({
       key,
-      tickets: sortTickets(tickets), // Sort tickets if needed
+      tickets: sortTickets(tickets),
     }));
   };
-
 
   const groupByPriority = (tickets) => {
     const grouped = tickets.reduce((groups, ticket) => {
@@ -137,8 +146,10 @@ function App() {
       groups[priorityLabel].push(ticket);
       return groups;
     }, {});
+
     return Object.entries(grouped).map(([key, tickets]) => ({
-      key, tickets: sortTickets(tickets),
+      key,
+      tickets: sortTickets(tickets),
     }));
   };
 
@@ -153,21 +164,23 @@ function App() {
     </div>
   );
 
-
   return (
     <div className="App">
-      <button className='displayButton' onClick={() => setIsOpen(prev => !prev)}>
+      <button className='displayButton' onClick={() => setIsOpen(prev => !prev)} ref={dropdownRef}>
         <img src={Display} alt='Display_img' />
         Display
         <img src={Down} alt='Down_img' />
       </button>
       {isOpen &&
-        <Dropdown
-          groupBy={groupBy}
-          setGroupBy={setGroupBy}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-        />}
+        <div onClick={handleInsideClick} ref={dropdownRef}>
+          <Dropdown
+            groupBy={groupBy}
+            setGroupBy={setGroupBy}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+          />
+        </div>
+      }
       <Dashboard
         groupedTickets={groupTickets(tickets)}
         getPriorityLabel={getPriorityLabel}

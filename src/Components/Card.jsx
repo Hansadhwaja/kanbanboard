@@ -2,7 +2,6 @@ import hp from '../assets/icons_FEtask/Img - High Priority.svg';
 import lp from '../assets/icons_FEtask/Img - Low Priority.svg';
 import mp from '../assets/icons_FEtask/Img - Medium Priority.svg';
 import np from '../assets/icons_FEtask/No-priority.svg'
-import up from '../assets/icons_FEtask/SVG - Urgent Priority colour.svg'
 import upg from '../assets/icons_FEtask/SVG - Urgent Priority grey.svg'
 import todo from '../assets/icons_FEtask/To-do.svg'
 import progress from '../assets/icons_FEtask/in-progress.svg';
@@ -11,7 +10,7 @@ import done from '../assets/icons_FEtask/Done.svg'
 import cancelled from '../assets/icons_FEtask/Cancelled.svg';
 import Profile from './Profile';
 
-const Card = ({ id, title, tag, priority, groupBy, status, userName,index }) => {
+const Card = ({ id, title, tag, priority, groupBy, status, userName, index }) => {
 
   const priorityImage = () => {
     switch (priority) {
@@ -25,9 +24,12 @@ const Card = ({ id, title, tag, priority, groupBy, status, userName,index }) => 
         return np;
       case 'Urgent':
         return upg;
+      default:
+        return null;
 
     }
   }
+  
   const keyImage = () => {
     switch (status) {
       case 'Todo':
@@ -40,6 +42,8 @@ const Card = ({ id, title, tag, priority, groupBy, status, userName,index }) => 
         return done;
       case 'Cancelled':
         return cancelled;
+      default:
+        return null;
 
     }
   }
@@ -51,16 +55,16 @@ const Card = ({ id, title, tag, priority, groupBy, status, userName,index }) => 
   return (
     <div className="card" style={{ animationDelay: `${index * 0.25}s` }}>
       <div className='text-card'>
-          <p className='id'>{id}</p>
-          <p className='title'>
-            {groupBy != 'status' && (
-              <img src={keyImage()} alt='image' />
-            )}
-            {title}
-          </p>
+        <p className='id'>{id}</p>
+        <p className='title'>
+          {groupBy !== 'status' && (
+            <img src={keyImage()} alt='keyimage' />
+          )}
+          {title}
+        </p>
         <div className='feature'>
           {groupBy !== 'priority' && (
-            <img className='img' src={priorityImage()} />
+            <img className='img' src={priorityImage()} alt='priorityimage' />
           )}
           <div className='tag-img'>
             <div className='circle' />
@@ -69,7 +73,7 @@ const Card = ({ id, title, tag, priority, groupBy, status, userName,index }) => 
         </div>
       </div>
       <div className='profile-card'>
-        {groupBy != 'user' && (
+        {groupBy !== 'user' && (
           <div className='profile'>
             <Profile name={userName.name} className='circle' />
             <div className='circle center' style={{ backgroundColor: bgColor }} />

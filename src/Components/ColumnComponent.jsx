@@ -12,7 +12,6 @@ import lp from '../assets/icons_FEtask/Img - Low Priority.svg';
 import mp from '../assets/icons_FEtask/Img - Medium Priority.svg';
 import np from '../assets/icons_FEtask/No-priority.svg'
 import up from '../assets/icons_FEtask/SVG - Urgent Priority colour.svg'
-import upg from '../assets/icons_FEtask/SVG - Urgent Priority grey.svg'
 import Profile from './Profile'
 
 const ColumnComponent = ({ group, priority, groupBy, userName }) => {
@@ -29,9 +28,12 @@ const ColumnComponent = ({ group, priority, groupBy, userName }) => {
                 return done;
             case 'Cancelled':
                 return cancelled;
+            default:
+                return null;
 
         }
     }
+    
     const priorityImage = () => {
         switch (group.key) {
             case "High":
@@ -44,9 +46,11 @@ const ColumnComponent = ({ group, priority, groupBy, userName }) => {
                 return np;
             case 'Urgent':
                 return up;
-
+            default:
+                return null;
         }
     }
+
     let bgColor = 'grey';
     if (groupBy === 'user') {
         const userFound = userName(group.key);
@@ -59,7 +63,7 @@ const ColumnComponent = ({ group, priority, groupBy, userName }) => {
             <div className='group-header'>
                 <div className='group-class'>
                     {groupBy === 'status' && (
-                        <img src={keyImage()} alt='image' />
+                        <img src={keyImage()} alt='Keyimage' />
                     )}
                     {groupBy === 'user' && (
                         <div className='profile'>
@@ -69,19 +73,19 @@ const ColumnComponent = ({ group, priority, groupBy, userName }) => {
 
                     )}
                     {groupBy === 'priority' && (
-                        <img src={priorityImage()} alt='image' />
+                        <img src={priorityImage()} alt='priorityImage' />
                     )}
 
                     <h3>{group.key}</h3>
                     <p className='number'>{group.tickets.length}</p>
                 </div>
                 <div className='add-dot'>
-                    <img src={add} />
-                    <img src={dot} />
+                    <img src={add} alt='add button' />
+                    <img src={dot} alt='dot menu' />
                 </div>
             </div>
 
-            {group.tickets.map((ticket,index) => (
+            {group.tickets.map((ticket, index) => (
                 <Card
                     key={ticket.id}
                     id={ticket.id}

@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const Profile = ({ name }) => {
-   
+
     const getInitials = (name) => {
         const nameArray = name.split(' ');
         const initials = nameArray.map((word) => word.charAt(0).toUpperCase()).join('');
@@ -10,7 +10,7 @@ const Profile = ({ name }) => {
     };
 
     const initials = getInitials(name);
-    
+
     return <div className='container'>{initials}</div>;
 };
 

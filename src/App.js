@@ -22,11 +22,11 @@ function App() {
   const [tickets, setTickets] = useState([]);
   const [users, setUsers] = useState([]);
   const [groupBy, setGroupBy] = useState(() => loadFromLocalStorage('kanban-grouping') || 'status');
-  const [sortBy, setSortBy] =  useState(() => loadFromLocalStorage('kanban-sorting') || 'priority');
+  const [sortBy, setSortBy] = useState(() => loadFromLocalStorage('kanban-sorting') || 'priority');
   const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
 
-  
+
 
   useEffect(() => {
     saveToLocalStorage('kanban-grouping', groupBy);
@@ -186,14 +186,6 @@ function App() {
     return user ? user : null;
   };
 
-
-
-  if (loading) return (
-    <div className='App loading'>
-      <Loading />
-    </div>
-  );
-
   return (
     <div className="App">
       <button className='displayButton' onClick={() => setIsOpen(prev => !prev)} ref={dropdownRef}>
@@ -211,12 +203,17 @@ function App() {
           />
         </div>
       }
-      <Dashboard
-        groupedTickets={groupTickets(tickets)}
-        getPriorityLabel={getPriorityLabel}
-        groupBy={groupBy}
-        userName={getUserByUserIdOrName}
-      />
+      {loading ? (
+        <Loading />
+
+      ) : (
+        <Dashboard
+          groupedTickets={groupTickets(tickets)}
+          getPriorityLabel={getPriorityLabel}
+          groupBy={groupBy}
+          userName={getUserByUserIdOrName}
+        />
+      )}
     </div>
   );
 }

@@ -9,13 +9,41 @@ import axios from 'axios';
 import Loading from './Components/Loading';
 
 function App() {
+
+  const saveToLocalStorage = (key, value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
+
+  const loadFromLocalStorage = (key) => {
+    const savedValue = localStorage.getItem(key);
+    return savedValue ? JSON.parse(savedValue) : null;
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [tickets, setTickets] = useState([]);
   const [users, setUsers] = useState([]);
-  const [groupBy, setGroupBy] = useState('status');
-  const [sortBy, setSortBy] = useState('priority');
+  const [groupBy, setGroupBy] = useState(() => loadFromLocalStorage('kanban-grouping') || 'status');
+  const [sortBy, setSortBy] =  useState(() => loadFromLocalStorage('kanban-sorting') || 'priority');
   const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
+
+  
+
+  useEffect(() => {
+    saveToLocalStorage('kanban-grouping', groupBy);
+    saveToLocalStorage('kanban-sorting', sortBy);
+  }, [groupBy, sortBy]);
+
+  useEffect(() => {
+    const savedGrouping = loadFromLocalStorage('kanban-grouping');
+    const savedSorting = loadFromLocalStorage('kanban-sorting');
+
+    if (savedGrouping) {
+      setGroupBy(savedGrouping);
+    }
+    if (savedSorting) {
+      setSortBy(savedSorting);
+    }
+  }, []);
 
   useEffect(() => {
     axios.get('https://api.quicksell.co/v1/internal/frontend-assignment')
@@ -157,6 +185,8 @@ function App() {
     const user = users.find((user) => user.id === identifier || user.name === identifier);
     return user ? user : null;
   };
+
+
 
   if (loading) return (
     <div className='App loading'>
